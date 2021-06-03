@@ -1,0 +1,30 @@
+name: CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Update Versions
+      env:
+        VERSION_PREFIX: 0.14
+        VERSION_SUFFIX: ${{github.run_number}}
+      run: |
+        VERSION=$VERSION_PREFIX.$VERSION_SUFFIX
+        sed -i bak "s:<Version>1.0.0</Version>:<Version>$VERSION</Version>:g" src/macropse.csproj
+    - name: Setup MSBuild
+      uses: microsoft/setup-msbuild@v1
+    - name: Setup NuGet
+      uses: NuGet/setup-nuget@v1.0.2
+    - name: Install dependencies
+      run: msbuild /t:Restore /p:Configuration=Release src/macropse.sln
+    - name: Build
+      run: msbuild /p:Configuration=Release src/macropse.csproj
