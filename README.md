@@ -1,3 +1,2 @@
 # macropse
-
-Keyboard programming software.
+Programming language for keyboard (Windows 10 only)
