@@ -12,6 +12,6 @@ jobs:
     - name: Setup MSBuild
       uses: microsoft/setup-msbuild@v1
     - name: Install dependencies
-      run: msbuild /t:Restore /p:Configuration=Release src/macropse.sln
+      run: msbuild /t:Restore /p:Configuration=Release Macropse/macropse.sln
     - name: Build
-      run: msbuild /p:Configuration=Release src/macropse.csproj
+      run: msbuild /p:Configuration=Release Macropse/macropse.csproj
