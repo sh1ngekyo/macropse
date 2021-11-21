@@ -1,2 +1,3 @@
 # macropse
-Programming language for keyboard
+
+Keyboard programming software.
