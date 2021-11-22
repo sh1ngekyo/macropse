@@ -14,4 +14,4 @@ jobs:
     - name: Install dependencies
       run: msbuild /t:Restore /p:Configuration=Release Macropse/macropse.sln
     - name: Build
-      run: msbuild /p:Configuration=Release Macropse/macropse.csproj
+      run: msbuild /p:Configuration=Release IO/IO.csproj && msbuild /p:Configuration=Release Macropse/macropse.csproj
