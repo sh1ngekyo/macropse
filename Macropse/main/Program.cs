@@ -1,4 +1,5 @@
 ﻿using macropse.Parser;
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,8 @@ namespace macropse
 {
     class Program
     {
+
+        /* Добавить систему сообщений об ошибках в скрипте и при парсинге */
         static void Main(string[] args)
         {
             var parser = new ScriptParser();

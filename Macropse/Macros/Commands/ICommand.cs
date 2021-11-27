@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace macropse.Commands
+namespace macropse.Macros.Commands
 {
     public enum CommandType
     {
@@ -16,6 +16,15 @@ namespace macropse.Commands
         VolumeAdd,
         VolumeMax,
         VolumeMin
+    }
+
+    public enum ParamType
+    {
+        Key,
+        Int,
+        Bool,
+        String,
+        None
     }
 
     public interface ICommand

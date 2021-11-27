@@ -1,4 +1,4 @@
-﻿using macropse.Commands;
+﻿using macropse.Macros.Commands;
 
 using System;
 using System.Collections.Generic;
