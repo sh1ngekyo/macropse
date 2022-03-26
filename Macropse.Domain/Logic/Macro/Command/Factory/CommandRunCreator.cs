@@ -11,7 +11,7 @@ namespace Macropse.Domain.Logic.Macro.Command.Factory
 {
     internal class CommandRunCreator : CommandFactory
     {
-        public override IExecutable Create(IList<object> parameters, uint repeats)
+        public override IExecutable Create(IList<dynamic> parameters, uint repeats)
         {
             return new CommandRun(
                 procName: (string)parameters[0],

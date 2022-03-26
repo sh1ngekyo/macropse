@@ -44,8 +44,7 @@ namespace Macropse.Domain.Logic.Settings
             { ParamType.Num, typeof(uint)},
             { ParamType.Bool, typeof(bool)},
             { ParamType.Key, typeof(object)},
-            { ParamType.String, typeof(string)},
-            { ParamType.None, null}
+            { ParamType.String, typeof(string)}
         };
     }
 }

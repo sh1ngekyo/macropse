@@ -10,6 +10,6 @@ namespace Macropse.Domain.Logic.Macro.Command.Factory
 {
     internal abstract class CommandFactory
     {
-        public abstract IExecutable Create(IList<object> parameters, uint repeats);
+        public abstract IExecutable Create(IList<dynamic> parameters, uint repeats);
     }
 }

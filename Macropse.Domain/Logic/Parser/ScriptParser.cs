@@ -15,11 +15,6 @@ namespace Macropse.Domain.Logic.Parser
 {
     public class ScriptParser
     {
-        static ScriptParser()
-        {
-
-        }
-
         private OutputPackage<uint> ParseRepeats(XmlNode node)
         {
             if (node.Attributes.GetNamedItem("loop") != null)
@@ -33,24 +28,24 @@ namespace Macropse.Domain.Logic.Parser
             return new OutputPackage<uint>(item: 1, default);
         }
 
-        private OutputPackage<List<object>> TryParseParams(Specification.ICommandParamsInfo paramsInfo, List<string> rawParams)
+        private OutputPackage<List<dynamic>> TryParseParams(Specification.ICommandParamsInfo paramsInfo, List<string> rawParams)
         {
             if (rawParams is null || rawParams.Count < paramsInfo.Bounds.Item1 || rawParams.Count > paramsInfo.Bounds.Item2)
             {
-                return new OutputPackage<List<object>>(item: default, errorMessage: new ParamsOutOfBoundsMessage((paramsInfo.Bounds.Item1, paramsInfo.Bounds.Item2), rawParams is null ? 0 : rawParams.Count));
+                return new OutputPackage<List<dynamic>>(item: default, errorMessage: new ParamsOutOfBoundsMessage((paramsInfo.Bounds.Item1, paramsInfo.Bounds.Item2), rawParams is null ? 0 : rawParams.Count));
             }
-            var result = new List<object>();
+            var result = new List<dynamic>();
             for (var i = 0; i < rawParams.Count; ++i)
             {
-                object[] args = { rawParams[i], null };
+                dynamic[] args = { rawParams[i], null };
                 Specification.ParamsTypeTable.TryGetValue(paramsInfo.ValidTypes[i], out var type);
                 if (!(bool)typeof(ParserUtills).GetMethod(nameof(ParserUtills.TryToParam)).MakeGenericMethod(type).Invoke(null, args))
                 {
-                    return new OutputPackage<List<object>>(item: default, errorMessage: new IncorrectParamMessage(rawParams[i], type.Name));
+                    return new OutputPackage<List<dynamic>>(item: default, errorMessage: new IncorrectParamMessage(rawParams[i], type.Name));
                 }
                 result.Add(args[1]);
             }
-            return new OutputPackage<List<object>>(item: result, default);
+            return new OutputPackage<List<dynamic>>(item: result, default);
         }
 
         private OutputPackage<IExecutable> TryParseCommand(XmlNode command_node)
