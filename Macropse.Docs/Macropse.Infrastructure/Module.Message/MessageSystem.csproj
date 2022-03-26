@@ -4,17 +4,16 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{86F4FE70-6981-477F-90B6-886B89476C0A}</ProjectGuid>
-    <OutputType>Exe</OutputType>
-    <RootNamespace>macropse</RootNamespace>
-    <AssemblyName>macropse</AssemblyName>
+    <ProjectGuid>{48EB32B7-485A-49CC-8C8C-F746F2AA0CB4}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>MessageSystem</RootNamespace>
+    <AssemblyName>MessageSystem</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -24,7 +23,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -43,17 +41,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="main\Program.cs" />
+    <Compile Include="MessageSystem\IMessageSender.cs" />
+    <Compile Include="MessageSystem\Message\Command\UnknownCommandTypeMessage.cs" />
+    <Compile Include="MessageSystem\Message\EmptyArgumentMessage.cs" />
+    <Compile Include="MessageSystem\Message\IMessage.cs" />
+    <Compile Include="MessageSystem\Message\IO\FileNotFoundMessage.cs" />
+    <Compile Include="MessageSystem\Message\ScriptBase\IncorrectScriptMessage.cs" />
+    <Compile Include="MessageSystem\Message\UnknownAttributeInScriptMessage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\IO\IO.csproj">
-      <Project>{3bd203c2-74b9-4ff8-8e1e-9d67769b5b7f}</Project>
-      <Name>IO</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

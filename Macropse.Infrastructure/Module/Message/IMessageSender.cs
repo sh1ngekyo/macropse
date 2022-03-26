@@ -4,12 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace macropse
+namespace Macropse.Infrastructure.Module.Message
 {
-    class Program
+    public interface IMessageSender
     {
-        static void Main(string[] args)
-        {
-        }
+        void SendMessage(IMessage message);
     }
 }
