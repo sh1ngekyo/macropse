@@ -69,6 +69,7 @@
     <Compile Include="Macros\Macro.cs" />
     <Compile Include="Main\Program.cs" />
     <Compile Include="Parser\AttributeParser.cs" />
+    <Compile Include="Parser\ParserOutput.cs" />
     <Compile Include="Parser\ScriptParser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -80,6 +81,10 @@
     <ProjectReference Include="..\IO\IO.csproj">
       <Project>{3bd203c2-74b9-4ff8-8e1e-9d67769b5b7f}</Project>
       <Name>IO</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MessageSystem\MessageSystem.csproj">
+      <Project>{48EB32B7-485A-49CC-8C8C-F746F2AA0CB4}</Project>
+      <Name>MessageSystem</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

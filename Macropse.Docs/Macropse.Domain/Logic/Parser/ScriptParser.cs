@@ -7,6 +7,8 @@ using IO.File;
 using System.Xml;
 using macropse.Macros;
 using macropse.Macros.Commands;
+using macropse.MessageSystem.Message;
+using macropse.MessageSystem.Message.ScriptBase;
 
 namespace macropse.Parser
 {
@@ -79,36 +81,51 @@ namespace macropse.Parser
             return false;
         }
 
-        public List<Macro> Parse(Script script)
+        private ObjectPackage<List<Macro>> GetMacros(XmlElement root)
+        {
+            var macros = new List<Macro>();
+            foreach (XmlElement macroNode in root)
+            {
+                var commandList = new List<ICommand>();
+                foreach (XmlNode commandNode in macroNode.ChildNodes)
+                {
+                    if (TryParseCommand(commandNode, out var command))
+                    {
+
+                    }
+                    commandList.Add(command);
+                }
+                var name = macroNode.Attributes.GetNamedItem("name")?.Value;
+                macros.Add(new Macro(name, commandList, 1));
+            }
+        }
+
+        private ObjectPackage<XmlDocument> LoadDoc(Script script)
         {
             var doc = new XmlDocument();
             try
             {
                 doc.LoadXml(script.Content);
+                return new ObjectPackage<XmlDocument>(item: doc, errorMessage: null);
             }
             catch (Exception e)
             {
-                throw e;
+                return new ObjectPackage<XmlDocument>(item: default,
+                                                     errorMessage: new IncorrectScriptMessage(script.Name, e.Message));
             }
-            var root = doc?.DocumentElement;
-            var macros = new List<Macro>();
-            if (root != null)
+        }
+
+        public ObjectPackage<List<Macro>> Parse(Script script)
+        {
+            var doc = LoadDoc(script);
+            if (doc.HasError)
             {
-                foreach (XmlElement macroNode in root)
-                {
-                    var name = macroNode.Attributes.GetNamedItem("name")?.Value;
-                    var commandList = new List<ICommand>();
-                    foreach (XmlNode commandNode in macroNode.ChildNodes)
-                    {
-                        if (TryParseCommand(commandNode, out var command))
-                        {
-                            commandList.Add(command);
-                        }
-                    }
-                    macros.Add(new Macro(name, commandList, 1));
-                }
+                return new ObjectPackage<List<Macro>>(item: null, errorMessage: doc.ErrorMessage);
             }
-            return macros;
+            var macroList = GetMacros(doc.Item.DocumentElement);
+            return macroList.HasError
+                ? new ObjectPackage<List<Macro>>(item: null, errorMessage: macroList.ErrorMessage)
+                : new ObjectPackage<List<Macro>>(macroList.Item, null);
         }
     }
 }
