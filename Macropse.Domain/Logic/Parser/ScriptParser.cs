@@ -2,6 +2,7 @@
 using Macropse.Domain.Logic.Interfaces;
 using Macropse.Domain.Logic.Macro;
 using Macropse.Domain.Logic.Settings;
+using Macropse.Infrastructure.Module.Driver;
 using Macropse.Infrastructure.Module.IO;
 using Macropse.Infrastructure.Module.Message.Command;
 using Macropse.Infrastructure.Module.Message.ScriptBase;
@@ -15,6 +16,25 @@ namespace Macropse.Domain.Logic.Parser
 {
     public class ScriptParser
     {
+        private OutputPackage<List<VirtualKey>> ParseMacroBinds(string xmlAttributeValue)
+        {
+            var rawParams = xmlAttributeValue.ExtractRawParams();
+            if (rawParams is null)
+            {
+                return new OutputPackage<List<VirtualKey>>(item: default, errorMessage: null);
+            }
+            var result = new List<VirtualKey>();
+            foreach (var raw in rawParams)
+            {
+                if (!raw.ToEnum<VirtualKey>(out var key))
+                {
+                    return new OutputPackage<List<VirtualKey>>(item: default, errorMessage: new IncorrectParamMessage(raw, "Key"));
+                }
+                result.Add(key);
+            }
+            return new OutputPackage<List<VirtualKey>>(item: result, errorMessage: default);
+        }
+
         private OutputPackage<uint> ParseRepeats(XmlNode node)
         {
             if (node.Attributes.GetNamedItem("loop") != null)
@@ -55,7 +75,7 @@ namespace Macropse.Domain.Logic.Parser
             {
                 return new OutputPackage<IExecutable>(item: default, errorMessage: new EmptyCommandTypeMessage());
             }
-            if(!ParserUtills.ToEnum<CommandType>(type, out var comtype))
+            if (!ParserUtills.ToEnum<CommandType>(type, out var comtype))
             {
                 return new OutputPackage<IExecutable>(item: default, errorMessage: new UnknownCommandTypeMessage(type));
             }
@@ -69,7 +89,7 @@ namespace Macropse.Domain.Logic.Parser
                     return new OutputPackage<IExecutable>(item: default, errorMessage: result.ErrorMessage);
                 }
                 var repeats = ParseRepeats(command_node);
-                if(repeats.HasError)
+                if (repeats.HasError)
                 {
                     return new OutputPackage<IExecutable>(item: default, errorMessage: repeats.ErrorMessage);
                 }
@@ -84,6 +104,16 @@ namespace Macropse.Domain.Logic.Parser
             foreach (XmlElement macroNode in root)
             {
                 var commandList = new List<IExecutable>();
+                var keys = ParseMacroBinds(macroNode.Attributes.GetNamedItem("keys").Value);
+                if(keys.HasError)
+                {
+                    return new OutputPackage<List<Macros>>(item: default, errorMessage: keys.ErrorMessage);
+                }
+                var repeats = ParseRepeats(macroNode);
+                if (repeats.HasError)
+                {
+                    return new OutputPackage<List<Macros>>(item: default, errorMessage: repeats.ErrorMessage);
+                }
                 foreach (XmlNode commandNode in macroNode.ChildNodes)
                 {
                     var result = TryParseCommand(commandNode);
@@ -94,12 +124,7 @@ namespace Macropse.Domain.Logic.Parser
                     commandList.Add(result.Item);
                 }
                 var name = macroNode.Attributes.GetNamedItem("name")?.Value;
-                var repeats = ParseRepeats(macroNode);
-                if(repeats.HasError)
-                {
-                    return new OutputPackage<List<Macros>>(item: default, errorMessage: repeats.ErrorMessage);
-                }
-                macros.Add(new Macros(name, commandList, repeats.Item));
+                macros.Add(new Macros(name, keys.Item, commandList, repeats.Item));
             }
             return new OutputPackage<List<Macros>>(item: macros, errorMessage: default);
         }

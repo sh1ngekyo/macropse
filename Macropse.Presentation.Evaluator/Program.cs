@@ -24,7 +24,10 @@ namespace Macropse.Presentation.Evaluator
             }
             Device device = new Device();
             device.Load();
-            output.Item.ForEach(x => x.Run(device));
+            output.Item.ForEach(x =>
+            {
+                x.Keys.ForEach(y => Console.WriteLine(y));
+            });
             Console.ReadKey();
         }
     }
