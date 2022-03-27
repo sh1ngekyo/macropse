@@ -11,7 +11,7 @@ namespace Macropse.Infrastructure.Module.Driver
     public delegate int Predicate(int device);
 
     [Flags]
-    internal enum KeyState : ushort
+    public enum KeyState : ushort
     {
         Down = 0x00,
         Up = 0x01,
@@ -22,15 +22,15 @@ namespace Macropse.Infrastructure.Module.Driver
         TermsrvVKPacket = 0x20
     }
     [StructLayout(LayoutKind.Sequential)]
-    internal struct KeyStroke
+    public struct KeyStroke
     {
-        public Keys Code;
+        public Key Code;
         public KeyState State;
         public uint Information;
     }
 
     [Flags]
-    internal enum MouseState : ushort
+    public enum MouseState : ushort
     {
         LeftDown = 0x01,
         LeftUp = 0x02,
@@ -51,7 +51,7 @@ namespace Macropse.Infrastructure.Module.Driver
     }
 
     [Flags]
-    internal enum MouseFlags : ushort
+    public enum MouseFlags : ushort
     {
         MoveRelative = 0x000,
         MoveAbsolute = 0x001,
@@ -62,7 +62,7 @@ namespace Macropse.Infrastructure.Module.Driver
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    internal struct MouseStroke
+    public struct MouseStroke
     {
         public MouseState State;
         public MouseFlags Flags;
@@ -75,21 +75,21 @@ namespace Macropse.Infrastructure.Module.Driver
 
 
     [StructLayout(LayoutKind.Explicit)]
-    internal struct Stroke
+    public struct Stroke
     {
         [FieldOffset(0)] public MouseStroke Mouse;
 
         [FieldOffset(0)] public KeyStroke Key;
     }
 
-    internal class KeyPressedEventArgs : EventArgs
+    public class KeyPressedEventArgs : EventArgs
     {
-        public Keys Key { get; set; }
+        public Key Key { get; set; }
         public KeyState State { get; set; }
         public bool Handled { get; set; }
     }
 
-    internal class MousePressedEventArgs : EventArgs
+    public class MousePressedEventArgs : EventArgs
     {
         public MouseState State { get; set; }
         public bool Handled { get; set; }
@@ -98,13 +98,13 @@ namespace Macropse.Infrastructure.Module.Driver
         public short Rolling { get; set; }
     }
 
-    internal enum ScrollDirection
+    public enum ScrollDirection
     {
         Down,
         Up
     }
 
-    internal static class InterceptionDriver
+    public static class InterceptionDriver
     {
         [DllImport("interception.dll", EntryPoint = "interception_create_context", CallingConvention = CallingConvention.Cdecl)]
         public static extern IntPtr CreateContext();

@@ -1,4 +1,5 @@
 ﻿using Macropse.Domain.Logic.Settings;
+using Macropse.Infrastructure.Module.Driver;
 
 using System;
 using System.Collections.Generic;
@@ -10,6 +11,6 @@ namespace Macropse.Domain.Logic.Interfaces
 {
     public interface IExecutable
     {
-        void Execute();
+        void Execute(Device device);
     }
 }

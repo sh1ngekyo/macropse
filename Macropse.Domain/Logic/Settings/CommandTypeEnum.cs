@@ -11,14 +11,7 @@ namespace Macropse.Domain.Logic.Settings
         Run,
         Sendkey,
         Delay,
-        MouseClick,
         MoveMouseTo,
         ShowMsgBox,
-        Close,
-        Minimize,
-        Maximize,
-        VolumeAdd,
-        VolumeMax,
-        VolumeMin
     }
 }

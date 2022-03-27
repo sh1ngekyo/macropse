@@ -21,6 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -33,6 +34,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -41,6 +43,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Logic\Macro\Command\CommandDelay.cs" />
+    <Compile Include="Logic\Macro\Command\CommandMoveMouseTo.cs" />
+    <Compile Include="Logic\Macro\Command\CommandSendKey.cs" />
+    <Compile Include="Logic\Macro\Command\CommandShowMsgBox.cs" />
+    <Compile Include="Logic\Macro\Command\Factory\CommandDelayCreator.cs" />
+    <Compile Include="Logic\Macro\Command\Factory\CommandMoveMouseToCreator.cs" />
+    <Compile Include="Logic\Macro\Command\Factory\CommandSendkeyCreator.cs" />
+    <Compile Include="Logic\Macro\Command\Factory\CommandShowMsgBoxCreator.cs" />
     <Compile Include="Logic\Parser\ParserUtills.cs" />
     <Compile Include="Logic\Settings\CommandTypeEnum.cs" />
     <Compile Include="Logic\Interfaces\IExecutable.cs" />

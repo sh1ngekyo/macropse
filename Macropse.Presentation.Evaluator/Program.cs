@@ -1,5 +1,6 @@
 ﻿using Macropse.Domain.External;
 using Macropse.Domain.Logic.Parser;
+using Macropse.Infrastructure.Module.Driver;
 using Macropse.Infrastructure.Module.IO;
 
 using System;
@@ -21,7 +22,9 @@ namespace Macropse.Presentation.Evaluator
                 Console.WriteLine(output.ErrorMessage.Message);
                 Console.ReadKey();
             }
-            output.Item.ForEach(x => Console.WriteLine(x.Repeats));
+            Device device = new Device();
+            device.Load();
+            output.Item.ForEach(x => x.Run(device));
             Console.ReadKey();
         }
     }

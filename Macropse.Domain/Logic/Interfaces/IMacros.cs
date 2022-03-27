@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Macropse.Infrastructure.Module.Driver;
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,6 +16,6 @@ namespace Macropse.Domain.Logic.Interfaces
 
         uint Repeats { get; }
 
-        void Run();
+        void Run(Device device);
     }
 }

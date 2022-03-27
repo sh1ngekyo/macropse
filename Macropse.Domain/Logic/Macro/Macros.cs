@@ -1,4 +1,5 @@
 ﻿using Macropse.Domain.Logic.Interfaces;
+using Macropse.Infrastructure.Module.Driver;
 
 using System;
 using System.Collections.Generic;
@@ -23,9 +24,12 @@ namespace Macropse.Domain.Logic.Macro
             Repeats = repeats;
         }
 
-        public void Run()
+        public void Run(Device device)
         {
-            Commands.ForEach(x => x.Execute());
+            for (int i = 0; i < Repeats; ++i)
+            {
+                Commands.ForEach(x => x.Execute(device: device));
+            }
         }
     }
 }

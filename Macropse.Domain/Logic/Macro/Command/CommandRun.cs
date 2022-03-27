@@ -1,8 +1,10 @@
 ﻿using Macropse.Domain.Logic.Interfaces;
 using Macropse.Domain.Logic.Settings;
+using Macropse.Infrastructure.Module.Driver;
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -30,9 +32,19 @@ namespace Macropse.Domain.Logic.Macro.Command
             Params = new CommandParams(procName, asAdmin);
         }
 
-        public void Execute()
+        public void Execute(Device device)
         {
-            System.Console.WriteLine($"Execute {typeof(CommandRun)} with param 1: {Params.ProcessName} and param 2: {Params.RunAsAdmin}");
+            for (int i = 0; i < Repeats; ++i)
+            {
+                Process proc = new Process();
+                proc.StartInfo.FileName = Params.ProcessName;
+                proc.StartInfo.UseShellExecute = true;
+                if (Params.RunAsAdmin)
+                {
+                    proc.StartInfo.Verb = "runas";
+                }
+                proc.Start();
+            }
         }
     }
 }

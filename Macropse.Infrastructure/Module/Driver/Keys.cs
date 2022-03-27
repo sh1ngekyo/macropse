@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Macropse.Infrastructure.Module.Driver
 {
-    public enum Keys : ushort
+    public enum Key : ushort
     {
         Escape = 1,
         //Digits
@@ -114,5 +114,8 @@ namespace Macropse.Infrastructure.Module.Driver
         ScrollLock = 70,
         Menu = 93,
         WindowsKey = 91,
+
+        MLeft = 478,
+        MRight = 479,
     }
 }

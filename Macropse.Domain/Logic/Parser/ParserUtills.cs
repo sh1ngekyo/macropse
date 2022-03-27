@@ -30,6 +30,10 @@ namespace Macropse.Domain.Logic.Parser
         public static bool TryToParam<T>(string raw, out T parsedParam)
         {
             parsedParam = default(T);
+            if(typeof(T).Equals(typeof(Infrastructure.Module.Driver.Key)))
+            {
+                return raw.ToEnum<T>(out parsedParam);
+            }
             try
             {
                 parsedParam = (T)Convert.ChangeType(raw, typeof(T));
