@@ -17,12 +17,12 @@ namespace Macropse.Domain.Logic.Macro
 
         public uint Repeats { get; private set; }
 
-        public List<VirtualKey> Keys { get; }
+        public VirtualKey[] Keys { get; }
 
         public Macros(string name, List<VirtualKey> keys, List<IExecutable> commands, uint repeats = 1)
         {
             Name = name;
-            Keys = keys;
+            Keys = keys.ToArray();
             Commands = commands;
             Repeats = repeats;
         }

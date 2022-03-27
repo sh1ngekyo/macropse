@@ -12,7 +12,7 @@ namespace Macropse.Domain.Logic.Interfaces
     {
         string Name { get; }
 
-        List<VirtualKey> Keys { get; }
+        VirtualKey[] Keys { get; }
 
         List<IExecutable> Commands { get; }
 

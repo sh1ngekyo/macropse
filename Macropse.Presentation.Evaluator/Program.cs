@@ -13,21 +13,25 @@ namespace Macropse.Presentation.Evaluator
 {
     class Program
     {
-        private static void Main(string[] args)
+        private static List<Domain.Logic.Macro.Macros> CreateMacros(string path)
         {
-            var input = ScriptReader.ReadScript("script.mcr");
+            var input = ScriptReader.ReadScript(path);
             var output = new ScriptParser().Parse(input);
             if (output.HasError)
             {
                 Console.WriteLine(output.ErrorMessage.Message);
-                Console.ReadKey();
+                return null;
             }
-            Device device = new Device();
-            device.Load();
-            output.Item.ForEach(x =>
+            return output.Item;
+        }
+
+        private static void Main(string[] args)
+        {
+            var macros = CreateMacros("script.mcr");
+            if (macros != null)
             {
-                x.Keys.ForEach(y => Console.WriteLine(y));
-            });
+                ProgramLoop.Run(macros);
+            }
             Console.ReadKey();
         }
     }
