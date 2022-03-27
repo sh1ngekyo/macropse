@@ -30,7 +30,7 @@ namespace Macropse.Presentation.Evaluator
             var macros = CreateMacros("script.mcr");
             if (macros != null)
             {
-                ProgramLoop.Run(macros);
+                ProgramLoop.Run(macros, 100);
             }
             Console.ReadKey();
         }

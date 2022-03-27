@@ -11,22 +11,27 @@ namespace Macropse.Presentation.Evaluator
 {
     internal static class ProgramLoop
     {
-        public static void Run(List<Domain.Logic.Macro.Macros> macros)
+        public static void Run(List<Domain.Logic.Macro.Macros> macros, int delay)
         {
             Device device = new Device();
             if(device.Load())
             {
                 bool isRunning = true;
+                int delta = delay;
                 while(isRunning)
                 {
                     foreach(var macro in macros)
                     {
-                        if(Keyboard.IsKeyDown(macro.Keys))
+                        if(delta > 0)
                         {
-                            macro.Run(device);
-                            Console.WriteLine("g");
+                            --delta;
                         }
-                    }
+                        if(Keyboard.IsKeyDown(macro.Keys) && delta == 0)
+                        {
+                            delta = delay;
+                            Task.Run(() => macro.Run(device));
+                        }
+                    } 
                     Thread.Sleep(1);
                 }
             }
