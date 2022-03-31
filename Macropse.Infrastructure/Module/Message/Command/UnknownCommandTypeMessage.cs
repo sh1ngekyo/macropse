@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Macropse.Infrastructure.Module.Message.Command
+﻿namespace Macropse.Infrastructure.Module.Message.Command
 {
     public class UnknownCommandTypeMessage : IMessage
     {
@@ -18,7 +12,8 @@ namespace Macropse.Infrastructure.Module.Message.Command
 
         public UnknownCommandTypeMessage(string rawCommandType) : this()
         {
-            Message = $"Unknown command '{rawCommandType}'. Read the documentation to find out the signatures of the avaliable commands.";
+            Message = (rawCommandType is null) ? "Missing command type." : $"Unknown command '{rawCommandType}'.";
+            Message += " Read the documentation to find out the signatures of the avaliable commands.";
         }
     }
 }

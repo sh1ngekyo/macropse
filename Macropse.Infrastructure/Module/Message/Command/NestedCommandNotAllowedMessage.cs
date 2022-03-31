@@ -1,13 +1,13 @@
 ﻿namespace Macropse.Infrastructure.Module.Message.Command
 {
-    public class EmptyCommandTypeMessage : IMessage
+    public class NestedCommandNotAllowedMessage : IMessage
     {
         public ResultCode ResultCode { get; }
         public string Message { get; }
-        public EmptyCommandTypeMessage()
+        public NestedCommandNotAllowedMessage()
         {
             ResultCode = ResultCode.ParseCommandError;
-            Message = $"Command without type isn't allowed. Read the documentation to find out the signatures of the avaliable commands.";
+            Message = $"Tag <command> can't be nested. Please, read the documentation.";
         }
     }
 }

@@ -5,14 +5,14 @@ using System.Collections.Generic;
 
 namespace Macropse.Domain.Logic.Macro.Command.Factory
 {
-    internal class CommandRunCreator : CommandFactory
+    internal class CommandMoveMouseToCreator : CommandFactory
     {
         public override IExecutable Create(IList<dynamic> parameters, uint repeats)
         {
-            return new CommandRun(
-                procName: (string)parameters[0],
-                asAdmin: parameters.Count == 2 ? (bool)parameters[1] : false,
-                type: CommandType.Run,
+            return new CommandMoveMouseTo(
+                x: (uint)parameters[0],
+                y: (uint)parameters[1],
+                type: CommandType.MoveMouseTo,
                 repeats: repeats);
         }
     }

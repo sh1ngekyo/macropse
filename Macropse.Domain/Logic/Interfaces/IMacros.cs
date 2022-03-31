@@ -1,8 +1,6 @@
-﻿using System;
+﻿using Macropse.Infrastructure.Module.Driver;
+
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Macropse.Domain.Logic.Interfaces
 {
@@ -10,10 +8,12 @@ namespace Macropse.Domain.Logic.Interfaces
     {
         string Name { get; }
 
+        VirtualKey[] Keys { get; }
+
         List<IExecutable> Commands { get; }
 
         uint Repeats { get; }
 
-        void Run();
+        void Run(Device device);
     }
 }

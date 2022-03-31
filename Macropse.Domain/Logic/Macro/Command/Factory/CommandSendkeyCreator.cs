@@ -1,17 +1,17 @@
 ﻿using Macropse.Domain.Logic.Interfaces;
 using Macropse.Domain.Logic.Settings;
+using Macropse.Infrastructure.Module.Driver;
 
 using System.Collections.Generic;
 
 namespace Macropse.Domain.Logic.Macro.Command.Factory
 {
-    internal class CommandRunCreator : CommandFactory
+    internal class CommandSendkeyCreator : CommandFactory
     {
         public override IExecutable Create(IList<dynamic> parameters, uint repeats)
         {
-            return new CommandRun(
-                procName: (string)parameters[0],
-                asAdmin: parameters.Count == 2 ? (bool)parameters[1] : false,
+            return new CommandSendKey(
+                keys: (Key)parameters[0],
                 type: CommandType.Run,
                 repeats: repeats);
         }

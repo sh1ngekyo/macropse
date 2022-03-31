@@ -1,10 +1,7 @@
 ﻿using Macropse.Domain.Logic.Interfaces;
+using Macropse.Infrastructure.Module.Driver;
 
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Macropse.Domain.Logic.Macro
 {
@@ -16,16 +13,22 @@ namespace Macropse.Domain.Logic.Macro
 
         public uint Repeats { get; private set; }
 
-        public Macros(string name, List<IExecutable> commands, uint repeats = 1)
+        public VirtualKey[] Keys { get; }
+
+        public Macros(string name, List<VirtualKey> keys, List<IExecutable> commands, uint repeats = 1)
         {
             Name = name;
+            Keys = keys.ToArray();
             Commands = commands;
             Repeats = repeats;
         }
 
-        public void Run()
+        public void Run(Device device)
         {
-            Commands.ForEach(x => x.Execute());
+            for (int i = 0; i < Repeats; ++i)
+            {
+                Commands.ForEach(x => x.Execute(device: device));
+            }
         }
     }
 }

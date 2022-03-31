@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Macropse.Infrastructure.Module.Message.Command
+﻿namespace Macropse.Infrastructure.Module.Message.Params
 {
     public class IncorrectParamMessage : IMessage
     {

@@ -1,13 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace Macropse.Infrastructure.Module.Driver
 {
-    class Device
+    public class Device
     {
         private IntPtr CTX;
         private Thread CallbackThread;
@@ -124,7 +121,7 @@ namespace Macropse.Infrastructure.Module.Driver
             throw new Exception(" Driver failed and has been unloaded.");
         }
 
-        public void SendKey(Keys key, KeyState state)
+        public void SendKey(Key key, KeyState state)
         {
             var stroke = new Stroke();
             var keyStroke = new KeyStroke
@@ -140,7 +137,7 @@ namespace Macropse.Infrastructure.Module.Driver
             }
         }
 
-        public void SendKey(Keys key)
+        public void SendKey(Key key)
         {
             SendKey(key, KeyState.Down);
             if (KeyPressDelay > 0)
@@ -150,9 +147,9 @@ namespace Macropse.Infrastructure.Module.Driver
             SendKey(key, KeyState.Up);
         }
 
-        public void SendKeys(params Keys[] HWKeys)
+        public void SendKeys(params Key[] HWKeys)
         {
-            foreach (Keys key in HWKeys)
+            foreach (Key key in HWKeys)
             {
                 SendKey(key);
             }
@@ -200,7 +197,7 @@ namespace Macropse.Infrastructure.Module.Driver
 
         public void MoveMouseTo(int x, int y)
         {
-            //Cursor.Position = new System.Drawing.Point(x, y);
+            Cursor.Position = new System.Drawing.Point(x, y);
         }
     }
 }
