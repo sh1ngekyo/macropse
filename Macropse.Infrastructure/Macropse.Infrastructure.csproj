@@ -50,22 +50,21 @@
     <Compile Include="Module\IO\Script.cs" />
     <Compile Include="Module\IO\ScriptReader.cs" />
     <Compile Include="Module\IO\ScriptWriter.cs" />
+    <Compile Include="Module\Message\Args\UnknownArgumentMessage.cs" />
     <Compile Include="Module\Message\Command\EmptyCommandTypeMessage.cs" />
-    <Compile Include="Module\Message\Command\IncorrectParamMessage.cs" />
-    <Compile Include="Module\Message\Command\IncorrectRepeatValueMessage.cs" />
-    <Compile Include="Module\Message\Command\ParamsOutOfBoundsMessage.cs" />
+    <Compile Include="Module\Message\Params\IncorrectParamMessage.cs" />
+    <Compile Include="Module\Message\Command\NestedCommandNotAllowedMessage.cs" />
+    <Compile Include="Module\Message\Params\ParamsOutOfBoundsMessage.cs" />
     <Compile Include="Module\Message\Command\UnknownCommandTypeMessage.cs" />
-    <Compile Include="Module\Message\EmptyArgumentMessage.cs" />
+    <Compile Include="Module\Message\Args\EmptyArgumentMessage.cs" />
     <Compile Include="Module\Message\IMessage.cs" />
     <Compile Include="Module\Message\IMessageSender.cs" />
     <Compile Include="Module\Message\IO\FileNotFoundMessage.cs" />
+    <Compile Include="Module\Message\ScriptBase\EmptyNestedTagMessage.cs" />
     <Compile Include="Module\Message\ScriptBase\IncorrectScriptMessage.cs" />
+    <Compile Include="Module\Message\ScriptBase\ScriptRootMissingMessage.cs" />
+    <Compile Include="Module\Message\ScriptBase\WrongTagTypeMessage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Module\Driver\.keep" />
-    <None Include="Module\IO\.keep" />
-    <None Include="Module\Message\.keep" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

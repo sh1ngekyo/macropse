@@ -18,10 +18,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Command\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\Macropse.Domain\Macropse.Domain.csproj" />
   </ItemGroup>
 

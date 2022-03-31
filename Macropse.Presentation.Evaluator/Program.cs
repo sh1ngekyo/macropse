@@ -1,38 +1,29 @@
-﻿using Macropse.Domain.External;
+﻿using Macropse.Domain.Logic.Output;
 using Macropse.Domain.Logic.Parser;
-using Macropse.Infrastructure.Module.Driver;
 using Macropse.Infrastructure.Module.IO;
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Macropse.Presentation.Evaluator
 {
     class Program
     {
-        private static List<Domain.Logic.Macro.Macros> CreateMacros(string path)
+        private static ExecutableModule BuildExecutableFromScript(Script script)
         {
-            var input = ScriptReader.ReadScript(path);
-            var output = new ScriptParser().Parse(input);
+            var output = new ScriptParser().Parse(script);
             if (output.HasError)
             {
-                Console.WriteLine(output.ErrorMessage.Message);
-                return null;
+                new ConsoleMessageSender().SendMessage(output.ErrorMessage);
+                Console.ReadKey();
+                Environment.Exit(0);
             }
             return output.Item;
         }
 
         private static void Main(string[] args)
         {
-            var macros = CreateMacros("script.mcr");
-            if (macros != null)
-            {
-                ProgramLoop.Run(macros, 100);
-            }
-            Console.ReadKey();
+            var output = BuildExecutableFromScript(ScriptReader.ReadScript("script.mcr"));
+            ProgramLoop.Run(output);
         }
     }
 }

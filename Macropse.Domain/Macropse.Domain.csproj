@@ -43,6 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Logic\Interfaces\IBuilder.cs" />
     <Compile Include="Logic\Macro\Command\CommandDelay.cs" />
     <Compile Include="Logic\Macro\Command\CommandMoveMouseTo.cs" />
     <Compile Include="Logic\Macro\Command\CommandSendKey.cs" />
@@ -51,7 +52,13 @@
     <Compile Include="Logic\Macro\Command\Factory\CommandMoveMouseToCreator.cs" />
     <Compile Include="Logic\Macro\Command\Factory\CommandSendkeyCreator.cs" />
     <Compile Include="Logic\Macro\Command\Factory\CommandShowMsgBoxCreator.cs" />
+    <Compile Include="Logic\Parser\CommandBuilder.cs" />
+    <Compile Include="Logic\Parser\MacroBuilder.cs" />
+    <Compile Include="Logic\Parser\ParamParser.cs" />
+    <Compile Include="Logic\Output\ExecutableModule.cs" />
     <Compile Include="Logic\Parser\ParserUtills.cs" />
+    <Compile Include="Logic\Output\Header.cs" />
+    <Compile Include="Logic\Parser\ScriptRootBuilder.cs" />
     <Compile Include="Logic\Settings\CommandTypeEnum.cs" />
     <Compile Include="Logic\Interfaces\IExecutable.cs" />
     <Compile Include="Logic\Interfaces\IMacros.cs" />

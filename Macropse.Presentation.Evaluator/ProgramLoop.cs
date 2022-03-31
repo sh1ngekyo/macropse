@@ -1,9 +1,7 @@
-﻿using Macropse.Infrastructure.Module.Driver;
+﻿using Macropse.Domain.Logic.Output;
+using Macropse.Infrastructure.Module.Driver;
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -11,16 +9,16 @@ namespace Macropse.Presentation.Evaluator
 {
     internal static class ProgramLoop
     {
-        public static void Run(List<Domain.Logic.Macro.Macros> macros, int delay)
+        public static void Run(ExecutableModule executable)
         {
             Device device = new Device();
             if(device.Load())
             {
                 bool isRunning = true;
-                int delta = delay;
-                while(isRunning)
+                var delta = executable.Root.GlobalDelay;
+                while (isRunning)
                 {
-                    foreach(var macro in macros)
+                    foreach(var macro in executable.Macros)
                     {
                         if(delta > 0)
                         {
@@ -28,7 +26,7 @@ namespace Macropse.Presentation.Evaluator
                         }
                         if(Keyboard.IsKeyDown(macro.Keys) && delta == 0)
                         {
-                            delta = delay;
+                            delta = executable.Root.GlobalDelay;
                             Task.Run(() => macro.Run(device));
                         }
                     } 

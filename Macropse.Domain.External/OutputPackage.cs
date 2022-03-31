@@ -1,11 +1,5 @@
 ﻿using Macropse.Infrastructure.Module.Message;
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace Macropse.Domain.External
 {
     public class OutputPackage<T>

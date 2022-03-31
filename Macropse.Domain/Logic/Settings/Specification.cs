@@ -3,9 +3,6 @@ using Macropse.Infrastructure.Module.Driver;
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Macropse.Domain.Logic.Settings
 {
@@ -14,16 +11,16 @@ namespace Macropse.Domain.Logic.Settings
         public interface ICommandParamsInfo
         {
             List<ParamType> ValidTypes { get; }
-            Tuple<uint, uint> Bounds { get; }
+            (uint MinCount, uint MaxCount) Bounds { get; }
         }
 
         private class CommandParamsInfo : ICommandParamsInfo
         {
             public List<ParamType> ValidTypes { get; }
 
-            public Tuple<uint, uint> Bounds { get; }
+            public (uint MinCount, uint MaxCount) Bounds { get; }
 
-            internal CommandParamsInfo(List<ParamType> validTypes, Tuple<uint, uint> bounds)
+            internal CommandParamsInfo(List<ParamType> validTypes, (uint MinCount, uint MaxCount) bounds)
             {
                 ValidTypes = validTypes;
                 Bounds = bounds;
@@ -41,11 +38,11 @@ namespace Macropse.Domain.Logic.Settings
 
         internal static readonly IReadOnlyDictionary<CommandType, ICommandParamsInfo> ParamsTable = new Dictionary<CommandType, ICommandParamsInfo>()
         {
-            { CommandType.Run, new CommandParamsInfo(new List<ParamType>(2){ParamType.String, ParamType.Bool}, new Tuple<uint, uint>(1, 2))},
-            { CommandType.ShowMsgBox, new CommandParamsInfo(new List<ParamType>(1){ParamType.String}, new Tuple<uint, uint>(1, 1))},
-            { CommandType.MoveMouseTo, new CommandParamsInfo(new List<ParamType>(2){ParamType.Num, ParamType.Num}, new Tuple<uint, uint>(2, 2))},
-            { CommandType.Delay, new CommandParamsInfo(new List<ParamType>(1){ParamType.Num}, new Tuple<uint, uint>(1, 1))},
-            { CommandType.Sendkey, new CommandParamsInfo(new List<ParamType>(1){ParamType.Key}, new Tuple<uint, uint>(1, 1))},
+            { CommandType.Run, new CommandParamsInfo(new List<ParamType>(2){ParamType.String, ParamType.Bool}, (1, 2))},
+            { CommandType.ShowMsgBox, new CommandParamsInfo(new List<ParamType>(1){ParamType.String}, (1, 1))},
+            { CommandType.MoveMouseTo, new CommandParamsInfo(new List<ParamType>(2){ParamType.Num, ParamType.Num}, (2, 2))},
+            { CommandType.Delay, new CommandParamsInfo(new List<ParamType>(1){ParamType.Num}, (1, 1))},
+            { CommandType.Sendkey, new CommandParamsInfo(new List<ParamType>(1){ParamType.Key}, (1, 1))},
         };
 
         public static readonly IReadOnlyDictionary<ParamType, Type> ParamsTypeTable = new Dictionary<ParamType, Type>()

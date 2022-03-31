@@ -43,6 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ConsoleMessageSender.cs" />
     <Compile Include="Keyboard.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="ProgramLoop.cs" />
