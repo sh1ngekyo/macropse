@@ -16,6 +16,8 @@ namespace Macropse.Domain.Logic.Parser
         {
             {"pause", VirtualKey.Pause },
             {"delay", 100 },
+            {"whilePressed", false },
+            {"ifWinActive", string.Empty }
         };
 
         public OutputPackage<Header> BuildObject(XElement sourceData)
@@ -50,8 +52,10 @@ namespace Macropse.Domain.Logic.Parser
 
             AllowedAttributesDefaultValues.TryGetValue("pause", out var pauseAttr);
             AllowedAttributesDefaultValues.TryGetValue("delay", out var delayAttr);
+            AllowedAttributesDefaultValues.TryGetValue("whilePressed", out var whilePressedAttr);
+            AllowedAttributesDefaultValues.TryGetValue("ifWinActive", out var ifWinActiveAttr);
 
-            return new OutputPackage<Header>(item: new Header(pauseAttr, delayAttr), errorMessage: default);
+            return new OutputPackage<Header>(item: new Header(pauseAttr, delayAttr, whilePressedAttr, ifWinActiveAttr), errorMessage: default);
         }
     }
 }
