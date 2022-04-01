@@ -23,7 +23,7 @@ namespace Macropse.Presentation.Evaluator
         private static void Main(string[] args)
         {
             var output = BuildExecutableFromScript(ScriptReader.ReadScript("script.mcr"));
-            ProgramLoop.Run(output);
+            new ProgramLoop(output).Run();
         }
     }
 }
