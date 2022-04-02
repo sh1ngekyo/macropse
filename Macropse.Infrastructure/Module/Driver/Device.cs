@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 using System.Threading;
 using System.Windows.Forms;
 
@@ -6,10 +7,18 @@ namespace Macropse.Infrastructure.Module.Driver
 {
     public class Device
     {
-        private IntPtr CTX;
-        private Thread CallbackThread;
+        private IntPtr _context;
+        private Thread _callbackThread;
 
-        public bool IsLoaded { get; set; }
+        private int _mouseId = 0xB;
+        private int _keyBoardId = 0x2;
+
+        public KeyboardFilterMode KeyboardFilterMode { get; set; }
+
+        public MouseFilterMode MouseFilterMode { get; set; }
+
+        public bool IsLoaded { get; private set; }
+
         public int KeyPressDelay { get; set; }
         public int ClickDelay { get; set; }
         public int ScrollDelay { get; set; }
@@ -17,108 +26,141 @@ namespace Macropse.Infrastructure.Module.Driver
         public event EventHandler<KeyPressedEventArgs> OnKeyPressed;
         public event EventHandler<MousePressedEventArgs> OnMousePressed;
 
-        private int DeviceId;
 
         public Device()
         {
-            CTX = IntPtr.Zero;
+            _context = IntPtr.Zero;
+
+            KeyboardFilterMode = KeyboardFilterMode.None;
+            MouseFilterMode = MouseFilterMode.None;
+
             KeyPressDelay = 1;
             ClickDelay = 1;
             ScrollDelay = 15;
         }
 
-        public bool Load()
+        public bool TryLoad()
         {
             if (IsLoaded)
             {
                 return false;
             }
-            CTX = InterceptionDriver.CreateContext();
-            if (CTX != IntPtr.Zero)
+
+            _context = InterceptionDriver.CreateContext();
+
+            if (_context != IntPtr.Zero)
             {
-                CallbackThread = new Thread(new ThreadStart(DriverCallback))
+                _callbackThread?.Join();
+                _callbackThread = new Thread(DriverCallback)
                 {
                     Priority = ThreadPriority.Highest,
                     IsBackground = true
                 };
-                CallbackThread.Start();
+                _callbackThread.Start();
+
                 IsLoaded = true;
+
                 return true;
             }
-            else
-            {
-                IsLoaded = false;
-                return false;
-            }
+
+            IsLoaded = false;
+
+            return false;
         }
 
-        public void Unload()
+        public bool TryUnload()
         {
             if (!IsLoaded)
             {
-                return;
+                return false;
             }
-            if (CTX != IntPtr.Zero)
+
+            if (_context == IntPtr.Zero)
             {
-                CallbackThread.Abort();
-                InterceptionDriver.DestroyContext(CTX);
-                IsLoaded = false;
+                return false;
             }
+
+            IsLoaded = false;
+
+            InterceptionDriver.SetFilter(_context, InterceptionDriver.IsKeyboard, (ushort)KeyboardFilterMode.All);
+            InterceptionDriver.SetFilter(_context, InterceptionDriver.IsMouse, (ushort)MouseFilterMode.All);
+
+            _callbackThread.Join();
+            InterceptionDriver.DestroyContext(_context);
+
+            return true;
         }
 
         private void DriverCallback()
         {
-            InterceptionDriver.SetFilter(CTX, InterceptionDriver.IsKeyboard, 0xFFFF);
-            InterceptionDriver.SetFilter(CTX, InterceptionDriver.IsMouse, 0xFFFF);
+            InterceptionDriver.SetFilter(_context, InterceptionDriver.IsKeyboard, (ushort)KeyboardFilterMode);
+            InterceptionDriver.SetFilter(_context, InterceptionDriver.IsMouse, (ushort)MouseFilterMode);
 
             var stroke = new Stroke();
+            int deviceId;
 
-            while (InterceptionDriver.Receive(CTX, DeviceId = InterceptionDriver.Wait(CTX), ref stroke, 1) > 0)
+            while (InterceptionDriver.Receive(_context, deviceId = InterceptionDriver.Wait(_context), ref stroke, 1) > 0 && IsLoaded)
             {
-                if (InterceptionDriver.IsMouse(DeviceId) > 0)
+                if (InterceptionDriver.IsMouse(deviceId) > 0)
                 {
+                    _mouseId = deviceId;
+
                     if (OnMousePressed != null)
                     {
-                        var args = new MousePressedEventArgs()
+                        var args = new MousePressedEventArgs
                         {
                             X = stroke.Mouse.X,
                             Y = stroke.Mouse.Y,
                             State = stroke.Mouse.State,
                             Rolling = stroke.Mouse.Rolling
                         };
+
                         OnMousePressed(this, args);
+
                         if (args.Handled)
-                        {
+                        { 
                             continue;
                         }
+
                         stroke.Mouse.X = args.X;
                         stroke.Mouse.Y = args.Y;
                         stroke.Mouse.State = args.State;
                         stroke.Mouse.Rolling = args.Rolling;
                     }
                 }
-                if (InterceptionDriver.IsKeyboard(DeviceId) > 0)
+
+                if (InterceptionDriver.IsKeyboard(deviceId) > 0)
                 {
+                    _keyBoardId = deviceId;
+
                     if (OnKeyPressed != null)
                     {
-                        var args = new KeyPressedEventArgs()
-                        {
+                        var args = new KeyPressedEventArgs 
+                        { 
                             Key = stroke.Key.Code,
                             State = stroke.Key.State
                         };
+
                         OnKeyPressed(this, args);
+
                         if (args.Handled)
                         {
                             continue;
                         }
+
                         stroke.Key.Code = args.Key;
                         stroke.Key.State = args.State;
                     }
                 }
-                InterceptionDriver.Send(CTX, DeviceId, ref stroke, 1);
+
+                InterceptionDriver.Send(_context, deviceId, ref stroke, 1);
             }
-            Unload();
-            throw new Exception(" Driver failed and has been unloaded.");
+            if (!IsLoaded)
+            {
+                return;
+            }
+            TryUnload();
+            throw new Exception("Interception.Receive() failed for an unknown reason. The driver has been unloaded.");
         }
 
         public void SendKey(Key key, KeyState state)
@@ -129,8 +171,11 @@ namespace Macropse.Infrastructure.Module.Driver
                 Code = key,
                 State = state
             };
+
             stroke.Key = keyStroke;
-            InterceptionDriver.Send(CTX, DeviceId, ref stroke, 1);
+
+            InterceptionDriver.Send(_context, _keyBoardId, ref stroke, 1);
+
             if (KeyPressDelay > 0)
             {
                 Thread.Sleep(KeyPressDelay);
@@ -140,16 +185,18 @@ namespace Macropse.Infrastructure.Module.Driver
         public void SendKey(Key key)
         {
             SendKey(key, KeyState.Down);
+
             if (KeyPressDelay > 0)
             {
                 Thread.Sleep(KeyPressDelay);
             }
+
             SendKey(key, KeyState.Up);
         }
 
-        public void SendKeys(params Key[] HWKeys)
+        public void SendKeys(params Key[] keys)
         {
-            foreach (Key key in HWKeys)
+            foreach (var key in keys)
             {
                 SendKey(key);
             }
@@ -158,20 +205,21 @@ namespace Macropse.Infrastructure.Module.Driver
         public void SendMouseEvent(MouseState state)
         {
             var stroke = new Stroke();
-            var mouseStroke = new MouseStroke
-            {
-                State = state
-            };
+            var mouseStroke = new MouseStroke { State = state };
+
+
             if (state == MouseState.ScrollUp)
             {
                 mouseStroke.Rolling = 120;
             }
             else if (state == MouseState.ScrollDown)
             {
-                mouseStroke.Rolling = -120;
+                mouseStroke.Rolling = -120; 
             }
+
             stroke.Mouse = mouseStroke;
-            InterceptionDriver.Send(CTX, 12, ref stroke, 1);
+
+            InterceptionDriver.Send(_context, _mouseId, ref stroke, 1);
         }
 
         public void SendLeftClick()
@@ -188,16 +236,39 @@ namespace Macropse.Infrastructure.Module.Driver
             SendMouseEvent(MouseState.RightUp);
         }
 
-        private readonly MouseState[] DirToStateTable = { MouseState.ScrollDown, MouseState.ScrollUp };
-
-        public void ScrollMouse(ScrollDirection direction)
+        /*public void ScrollMouse(ScrollDirection direction)
         {
-            SendMouseEvent(DirToStateTable[(int)direction]);
-        }
+            switch (direction)
+            {
+                case ScrollDirection.Down:
+                    SendMouseEvent(MouseState.ScrollDown);
+                    break;
+                case ScrollDirection.Up:
+                    SendMouseEvent(MouseState.ScrollUp);
+                    break;
+            }
+        }*/
 
-        public void MoveMouseTo(int x, int y)
+        public void MoveMouseTo(int x, int y, bool useDriver = true)
         {
-            Cursor.Position = new System.Drawing.Point(x, y);
+            if(useDriver)
+            {
+                var stroke = new Stroke();
+                var mouseStroke = new MouseStroke
+                { 
+                    X = x,
+                    Y = y
+                };
+
+                stroke.Mouse = mouseStroke;
+                stroke.Mouse.Flags = MouseFlags.MoveAbsolute;
+
+                InterceptionDriver.Send(_context, _mouseId, ref stroke, 1);
+            }
+            else
+            {
+                Cursor.Position = new Point(x, y);
+            }
         }
     }
 }
