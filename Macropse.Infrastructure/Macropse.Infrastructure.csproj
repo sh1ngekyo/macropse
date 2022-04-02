@@ -45,7 +45,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Module\Driver\Device.cs" />
+    <Compile Include="Module\Driver\KeyPressedEventArgs.cs" />
     <Compile Include="Module\Driver\Keys.cs" />
+    <Compile Include="Module\Driver\MousePressedEventArgs.cs" />
     <Compile Include="Module\Driver\Wrapper.cs" />
     <Compile Include="Module\IO\Script.cs" />
     <Compile Include="Module\IO\ScriptReader.cs" />

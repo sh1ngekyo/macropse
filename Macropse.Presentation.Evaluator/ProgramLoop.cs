@@ -16,7 +16,10 @@ namespace Macropse.Presentation.Evaluator
         {
             this.executable = executable;
             cancelSource = new CancellationTokenSource();
+
             device = new Device();
+            device.KeyboardFilterMode = KeyboardFilterMode.All;
+            device.MouseFilterMode = MouseFilterMode.All;
         }
 
         private Device device;
@@ -50,7 +53,7 @@ namespace Macropse.Presentation.Evaluator
 
         public void Run()
         {
-            if (device.Load())
+            if (device.TryLoad())
             {
                 var isRunning = true;
                 var paused = false;
@@ -75,6 +78,7 @@ namespace Macropse.Presentation.Evaluator
                     cancelSource.Token.WaitHandle.WaitOne(1);
                 }
             }
+            device.TryUnload();
             Console.WriteLine("Error with driver");
         }
     }
