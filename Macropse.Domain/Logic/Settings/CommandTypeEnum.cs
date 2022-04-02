@@ -10,6 +10,7 @@
         Exit,
         LeftClick,
         RightClick,
-        SendSignal
+        SendSignal,
+        MouseScroll,
     }
 }
