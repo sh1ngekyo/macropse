@@ -38,6 +38,7 @@ namespace Macropse.Domain.Logic.Settings
             { CommandType.LeftClick, new CommandLeftClickCreator() },
             { CommandType.RightClick, new CommandRightClickCreator() },
             { CommandType.SendSignal, new CommandSendSignalCreator() },
+            { CommandType.MouseScroll, new CommandMouseScrollCreator() },
         };
 
         internal static readonly IReadOnlyDictionary<CommandType, ICommandParamsInfo> ParamsTable = new Dictionary<CommandType, ICommandParamsInfo>()
@@ -51,6 +52,7 @@ namespace Macropse.Domain.Logic.Settings
             { CommandType.LeftClick, null},
             { CommandType.RightClick, null},
             { CommandType.SendSignal, new CommandParamsInfo(new List<ParamType>(2){ParamType.Num, ParamType.Num}, (1, 2))},
+            { CommandType.MouseScroll, new CommandParamsInfo(new List<ParamType>(1){ParamType.String}, (1, 1))},
         };
 
         public static readonly IReadOnlyDictionary<ParamType, Type> ParamsTypeTable = new Dictionary<ParamType, Type>()

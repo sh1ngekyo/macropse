@@ -6,6 +6,13 @@ using System.Threading.Tasks;
 
 namespace Macropse.Infrastructure.Module.Driver
 {
+    public enum ScrollDirection
+    {
+        Down = 0,
+        Up = 1,
+        None,
+    }
+
     public class MousePressedEventArgs : EventArgs
     {
         public MouseState State { get; set; }

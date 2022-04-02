@@ -118,7 +118,7 @@ namespace Macropse.Infrastructure.Module.Driver
                         OnMousePressed(this, args);
 
                         if (args.Handled)
-                        { 
+                        {
                             continue;
                         }
 
@@ -135,8 +135,8 @@ namespace Macropse.Infrastructure.Module.Driver
 
                     if (OnKeyPressed != null)
                     {
-                        var args = new KeyPressedEventArgs 
-                        { 
+                        var args = new KeyPressedEventArgs
+                        {
                             Key = stroke.Key.Code,
                             State = stroke.Key.State
                         };
@@ -202,20 +202,9 @@ namespace Macropse.Infrastructure.Module.Driver
             }
         }
 
-        public void SendMouseEvent(MouseState state)
+        public void SendMouseEvent(MouseStroke mouseStroke)
         {
             var stroke = new Stroke();
-            var mouseStroke = new MouseStroke { State = state };
-
-
-            if (state == MouseState.ScrollUp)
-            {
-                mouseStroke.Rolling = 120;
-            }
-            else if (state == MouseState.ScrollDown)
-            {
-                mouseStroke.Rolling = -120; 
-            }
 
             stroke.Mouse = mouseStroke;
 
@@ -224,38 +213,32 @@ namespace Macropse.Infrastructure.Module.Driver
 
         public void SendLeftClick()
         {
-            SendMouseEvent(MouseState.LeftDown);
+            SendMouseEvent(new MouseStroke() { State = MouseState.LeftDown });
             Thread.Sleep(ClickDelay);
-            SendMouseEvent(MouseState.LeftUp);
+            SendMouseEvent(new MouseStroke() { State = MouseState.LeftUp });
         }
 
         public void SendRightClick()
         {
-            SendMouseEvent(MouseState.RightDown);
+            SendMouseEvent(new MouseStroke() { State = MouseState.RightDown });
             Thread.Sleep(ClickDelay);
-            SendMouseEvent(MouseState.RightUp);
+            SendMouseEvent(new MouseStroke() { State = MouseState.RightUp });
         }
 
-        /*public void ScrollMouse(ScrollDirection direction)
+        private readonly short[] DirToVal = { 100, -100 };
+
+        public void ScrollMouse(ScrollDirection direction)
         {
-            switch (direction)
-            {
-                case ScrollDirection.Down:
-                    SendMouseEvent(MouseState.ScrollDown);
-                    break;
-                case ScrollDirection.Up:
-                    SendMouseEvent(MouseState.ScrollUp);
-                    break;
-            }
-        }*/
+            SendMouseEvent(new MouseStroke() { State = MouseState.ScrollDown, Rolling = DirToVal[(int)direction] });
+        }
 
         public void MoveMouseTo(int x, int y, bool useDriver = true)
         {
-            if(useDriver)
+            if (useDriver)
             {
                 var stroke = new Stroke();
                 var mouseStroke = new MouseStroke
-                { 
+                {
                     X = x,
                     Y = y
                 };
