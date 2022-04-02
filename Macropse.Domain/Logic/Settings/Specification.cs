@@ -45,7 +45,7 @@ namespace Macropse.Domain.Logic.Settings
         {
             { CommandType.Run, new CommandParamsInfo(new List<ParamType>(2){ParamType.String, ParamType.Bool}, (1, 2))},
             { CommandType.ShowMsgBox, new CommandParamsInfo(new List<ParamType>(1){ParamType.String}, (1, 1))},
-            { CommandType.MoveMouseTo, new CommandParamsInfo(new List<ParamType>(2){ParamType.Num, ParamType.Num}, (2, 2))},
+            { CommandType.MoveMouseTo, new CommandParamsInfo(new List<ParamType>(2){ParamType.Num, ParamType.Num, ParamType.Bool}, (2, 3))},
             { CommandType.Delay, new CommandParamsInfo(new List<ParamType>(1){ParamType.Num}, (1, 1))},
             { CommandType.Sendkey, new CommandParamsInfo(new List<ParamType>(1){ParamType.Key}, (1, 1))},
             { CommandType.Exit, null},

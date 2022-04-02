@@ -9,27 +9,31 @@ namespace Macropse.Domain.Logic.Macro.Command
         private class CommandParams
         {
             public int X { get; }
+
             public int Y { get; }
 
-            public CommandParams(int x, int y)
+            public bool UsePixels { get; }
+
+            public CommandParams(int x, int y, bool usePixels)
             {
                 X = x;
                 Y = y;
+                UsePixels = usePixels;
             }
         }
 
         private CommandParams Params { get; }
 
-        public CommandMoveMouseTo(uint x, uint y, CommandType type, uint repeats = 1) : base(type, repeats)
+        public CommandMoveMouseTo(uint x, uint y, bool usePixels, CommandType type, uint repeats = 1) : base(type, repeats)
         {
-            Params = new CommandParams((int)x, (int)y);
+            Params = new CommandParams((int)x, (int)y, usePixels);
         }
 
         public void Execute(Device device)
         {
             for (var i = 0; i < Repeats; ++i)
             {
-                device.MoveMouseTo(Params.X, Params.Y);
+                device.MoveMouseTo(Params.X, Params.Y, Params.UsePixels);
             }
         }
     }

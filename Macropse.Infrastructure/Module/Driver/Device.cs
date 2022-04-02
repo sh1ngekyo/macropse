@@ -232,9 +232,13 @@ namespace Macropse.Infrastructure.Module.Driver
             SendMouseEvent(new MouseStroke() { State = MouseState.ScrollDown, Rolling = DirToVal[(int)direction] });
         }
 
-        public void MoveMouseTo(int x, int y, bool useDriver = true)
+        public void MoveMouseTo(int x, int y, bool useWin32Api = true)
         {
-            if (useDriver)
+            if (useWin32Api)
+            {
+                Cursor.Position = new Point(x, y);
+            }
+            else
             {
                 var stroke = new Stroke();
                 var mouseStroke = new MouseStroke
@@ -247,10 +251,6 @@ namespace Macropse.Infrastructure.Module.Driver
                 stroke.Mouse.Flags = MouseFlags.MoveAbsolute;
 
                 InterceptionDriver.Send(_context, _mouseId, ref stroke, 1);
-            }
-            else
-            {
-                Cursor.Position = new Point(x, y);
             }
         }
     }
