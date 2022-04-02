@@ -8,5 +8,7 @@
         MoveMouseTo,
         ShowMsgBox,
         Exit,
+        LeftClick,
+        RightClick
     }
 }
