@@ -12,8 +12,9 @@ namespace Macropse.Domain.Logic.Macro.Command.Factory
             return new CommandMoveMouseTo(
                 x: (uint)parameters[0],
                 y: (uint)parameters[1],
+                usePixels: parameters.Count == 3 ? (bool)parameters[2] : true,
                 type: CommandType.MoveMouseTo,
-                repeats: repeats);
+                repeats: repeats);;
         }
     }
 }
