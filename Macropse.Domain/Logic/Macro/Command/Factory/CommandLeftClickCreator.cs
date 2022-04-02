@@ -5,12 +5,13 @@ using System.Collections.Generic;
 
 namespace Macropse.Domain.Logic.Macro.Command.Factory
 {
-    internal class CommandExitCreator : CommandFactory
+    internal class CommandLeftClickCreator : CommandFactory
     {
         public override IExecutable Create(IList<dynamic> parameters, uint repeats)
         {
-            return new CommandExit(
-                type: CommandType.Exit);
+            return new CommandLeftClick(
+                type: CommandType.LeftClick,
+                repeats: repeats);
         }
     }
 }

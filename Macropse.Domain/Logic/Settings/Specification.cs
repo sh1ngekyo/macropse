@@ -35,6 +35,8 @@ namespace Macropse.Domain.Logic.Settings
             { CommandType.Delay, new CommandDelayCreator() },
             { CommandType.Sendkey, new CommandSendkeyCreator() },
             { CommandType.Exit, new CommandExitCreator() },
+            { CommandType.LeftClick, new CommandLeftClickCreator() },
+            { CommandType.RightClick, new CommandRightClickCreator() },
         };
 
         internal static readonly IReadOnlyDictionary<CommandType, ICommandParamsInfo> ParamsTable = new Dictionary<CommandType, ICommandParamsInfo>()
@@ -45,6 +47,8 @@ namespace Macropse.Domain.Logic.Settings
             { CommandType.Delay, new CommandParamsInfo(new List<ParamType>(1){ParamType.Num}, (1, 1))},
             { CommandType.Sendkey, new CommandParamsInfo(new List<ParamType>(1){ParamType.Key}, (1, 1))},
             { CommandType.Exit, null},
+            { CommandType.LeftClick, null},
+            { CommandType.RightClick, null},
         };
 
         public static readonly IReadOnlyDictionary<ParamType, Type> ParamsTypeTable = new Dictionary<ParamType, Type>()
