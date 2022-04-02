@@ -9,6 +9,7 @@
         ShowMsgBox,
         Exit,
         LeftClick,
-        RightClick
+        RightClick,
+        SendSignal
     }
 }
