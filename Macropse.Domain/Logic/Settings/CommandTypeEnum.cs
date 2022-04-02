@@ -7,5 +7,6 @@
         Delay,
         MoveMouseTo,
         ShowMsgBox,
+        Exit,
     }
 }
