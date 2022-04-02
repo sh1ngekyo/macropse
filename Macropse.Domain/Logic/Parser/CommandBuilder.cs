@@ -21,6 +21,10 @@ namespace Macropse.Domain.Logic.Parser
         {
             if (commandParamsInfo is null)
             {
+                if(rawParams != null)
+                {
+                    return new OutputPackage<List<dynamic>>(item: default, errorMessage: new UnknownArgumentMessage("command", "params"));
+                }
                 return new OutputPackage<List<dynamic>>(item: default, errorMessage: default);
             }
 
