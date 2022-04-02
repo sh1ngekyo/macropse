@@ -51,12 +51,14 @@
     <Compile Include="Logic\Macro\Command\CommandRightClick.cs" />
     <Compile Include="Logic\Macro\Command\CommandSendKey.cs" />
     <Compile Include="Logic\Macro\Command\CommandShowMsgBox.cs" />
+    <Compile Include="Logic\Macro\Command\CommandSendSignal.cs" />
     <Compile Include="Logic\Macro\Command\Factory\CommandDelayCreator.cs" />
     <Compile Include="Logic\Macro\Command\Factory\CommandExitCreator.cs" />
     <Compile Include="Logic\Macro\Command\Factory\CommandLeftClickCreator.cs" />
     <Compile Include="Logic\Macro\Command\Factory\CommandMoveMouseToCreator.cs" />
     <Compile Include="Logic\Macro\Command\Factory\CommandRightClickCreator.cs" />
     <Compile Include="Logic\Macro\Command\Factory\CommandSendkeyCreator.cs" />
+    <Compile Include="Logic\Macro\Command\Factory\CommandSendSignalCreator.cs" />
     <Compile Include="Logic\Macro\Command\Factory\CommandShowMsgBoxCreator.cs" />
     <Compile Include="Logic\Parser\CommandBuilder.cs" />
     <Compile Include="Logic\Parser\MacroBuilder.cs" />
