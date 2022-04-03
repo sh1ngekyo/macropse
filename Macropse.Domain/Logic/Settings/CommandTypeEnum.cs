@@ -12,5 +12,9 @@
         RightClick,
         SendSignal,
         MouseScroll,
+        VolumeAdd,
+        VolumeRemove,
+        VolumeMute,
+        VolumeSet
     }
 }
