@@ -13,5 +13,6 @@
         SendSignal,
         MouseScroll,
         VolumeAdd,
+        VolumeRemove
     }
 }

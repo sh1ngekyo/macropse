@@ -5,7 +5,7 @@ using Macropse.Infrastructure.Module.Driver;
 
 namespace Macropse.Domain.Logic.Macro.Command
 {
-    public class CommandVolumeAdd : CommandBase, IExecutable
+    class CommandVolumeRemove : CommandBase, IExecutable
     {
         private class CommandParams
         {
@@ -19,7 +19,7 @@ namespace Macropse.Domain.Logic.Macro.Command
 
         private CommandParams Params { get; }
 
-        public CommandVolumeAdd(uint value, CommandType type, uint repeats = 1) : base(type, repeats)
+        public CommandVolumeRemove(uint value, CommandType type, uint repeats = 1) : base(type, repeats)
         {
             Params = new CommandParams(value);
         }
@@ -29,7 +29,7 @@ namespace Macropse.Domain.Logic.Macro.Command
             for (var i = 0; i < Repeats; ++i)
             {
                 var curVolume = SystemVolumeUtil.GetSystemVolume(SystemVolumeUtil.VolumeUnit.Scalar);
-                SystemVolumeUtil.SetSystemVolume(curVolume + Params.Value, SystemVolumeUtil.VolumeUnit.Scalar);
+                SystemVolumeUtil.SetSystemVolume(curVolume - Params.Value, SystemVolumeUtil.VolumeUnit.Scalar);
             }
         }
     }

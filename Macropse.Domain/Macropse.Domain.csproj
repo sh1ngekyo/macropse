@@ -54,6 +54,7 @@
     <Compile Include="Logic\Macro\Command\CommandShowMsgBox.cs" />
     <Compile Include="Logic\Macro\Command\CommandSendSignal.cs" />
     <Compile Include="Logic\Macro\Command\CommandVolumeAdd.cs" />
+    <Compile Include="Logic\Macro\Command\CommandVolumeRemove.cs" />
     <Compile Include="Logic\Macro\Command\Factory\CommandDelayCreator.cs" />
     <Compile Include="Logic\Macro\Command\Factory\CommandExitCreator.cs" />
     <Compile Include="Logic\Macro\Command\Factory\CommandLeftClickCreator.cs" />
@@ -64,6 +65,8 @@
     <Compile Include="Logic\Macro\Command\Factory\CommandSendSignalCreator.cs" />
     <Compile Include="Logic\Macro\Command\Factory\CommandShowMsgBoxCreator.cs" />
     <Compile Include="Logic\Macro\Command\Factory\CommandVolumeAddCreator.cs" />
+    <Compile Include="Logic\Macro\Command\Factory\CommandVolumeRemoveCreator.cs" />
+    <Compile Include="Logic\Macro\Command\Utils\SystemVolumeUtil.cs" />
     <Compile Include="Logic\Parser\CommandBuilder.cs" />
     <Compile Include="Logic\Parser\MacroBuilder.cs" />
     <Compile Include="Logic\Parser\ParamParser.cs" />
@@ -94,5 +97,6 @@
       <Name>Macropse.Infrastructure</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
