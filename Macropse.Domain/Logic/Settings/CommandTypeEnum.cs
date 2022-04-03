@@ -12,5 +12,6 @@
         RightClick,
         SendSignal,
         MouseScroll,
+        VolumeAdd,
     }
 }
