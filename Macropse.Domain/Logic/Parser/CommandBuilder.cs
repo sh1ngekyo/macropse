@@ -8,6 +8,8 @@ using Macropse.Infrastructure.Module.Message.Params;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using System.Text.RegularExpressions;
 using System.Xml.Linq;
 
 
@@ -17,7 +19,7 @@ namespace Macropse.Domain.Logic.Parser
     {
         private string[] AllowedKeywords = { "type", "params", "loop" };
 
-        private OutputPackage<List<dynamic>> ParseRawParams(List<string> rawParams, Specification.ICommandParamsInfo commandParamsInfo)
+        private OutputPackage<List<dynamic>> ParseRawParams(string rawParams, Specification.ICommandParamsInfo commandParamsInfo)
         {
             if (commandParamsInfo is null)
             {
@@ -33,19 +35,37 @@ namespace Macropse.Domain.Logic.Parser
                 return new OutputPackage<List<dynamic>>(item: default, errorMessage: new EmptyArgumentMessage("params", "command"));
             }
 
-            if (rawParams.Count < commandParamsInfo.Bounds.MinCount || rawParams.Count > commandParamsInfo.Bounds.MaxCount)
+            var rawParamsList = new List<string>();
+            Regex.Split(rawParams, "('.*')")
+                .Where(x => !string.IsNullOrWhiteSpace(x))
+                .ToList()
+                .ForEach(x =>
+                {
+                    if (!x.StartsWith("'") || !x.EndsWith("'"))
+                    {
+                        rawParamsList.AddRange(ParserUtills.ExtractRawParams(new string(x
+                                            .Where(c => !Char.IsWhiteSpace(c))
+                                            .ToArray())));
+                    }
+                    else
+                    {
+                        rawParamsList.Add(x);
+                    }
+                });
+
+            if (rawParamsList.Count < commandParamsInfo.Bounds.MinCount || rawParamsList.Count > commandParamsInfo.Bounds.MaxCount)
             {
-                return new OutputPackage<List<dynamic>>(item: default, errorMessage: new ParamsOutOfBoundsMessage(commandParamsInfo.Bounds, rawParams.Count));
+                return new OutputPackage<List<dynamic>>(item: default, errorMessage: new ParamsOutOfBoundsMessage(commandParamsInfo.Bounds, rawParamsList.Count));
             }
 
             var parsedParams = new List<dynamic>();
 
             var indexOfList = 0;
             var count = 0;
-            foreach (var rawParam in rawParams)
+            foreach (var rawParamItem in rawParamsList)
             {
                 Specification.ParamsTypeTable.TryGetValue(commandParamsInfo.ValidTypes[indexOfList].Type, out var validParam);
-                object[] args = { rawParam };
+                object[] args = { rawParamItem };
                 dynamic paramPac = typeof(ParamParser).GetMethod(nameof(ParamParser.ParseParam)).MakeGenericMethod(validParam).Invoke(null, args);
                 if (paramPac.HasError)
                 {
@@ -53,7 +73,7 @@ namespace Macropse.Domain.Logic.Parser
                 }
                 parsedParams.Add(paramPac.Item);
                 count++;
-                if(count >= commandParamsInfo.ValidTypes[indexOfList].Count)
+                if (count >= commandParamsInfo.ValidTypes[indexOfList].Count)
                 {
                     count = 0;
                     ++indexOfList;
@@ -100,11 +120,8 @@ namespace Macropse.Domain.Logic.Parser
 
                 Specification.CommandTable.TryGetValue(comtype, out var creator);
                 Specification.ParamsTable.TryGetValue(comtype, out var paramsInfo);
-                var paramsPac = ParseRawParams(ParserUtills.ExtractRawParams(
-                    new string(sourceData.Attribute("params")?.Value
-                    .Where(c => !Char.IsWhiteSpace(c))
-                    .ToArray())),
-                    paramsInfo);
+
+                var paramsPac = ParseRawParams(sourceData.Attribute("params")?.Value, paramsInfo);
 
                 if (paramsPac.HasError)
                 {

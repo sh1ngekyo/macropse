@@ -55,7 +55,7 @@ namespace Macropse.Domain.Unit.Test
             var output = parser.Parse(new Script("test", 
                 "<root>" +
                 "<macro keys=\"A\">" +
-                "<command type=\"run\" params=\"test\"/>" +
+                "<command type=\"run\" params=\"'test'\"/>" +
                 "</macro>" +
                 "</root>"));
 
@@ -73,7 +73,7 @@ namespace Macropse.Domain.Unit.Test
             var output = parser.Parse(new Script("test",
                 "<root pause=\"A\" delay=\"123\">" +
                 "<macro keys=\"A\">" +
-                "<command type=\"run\" params=\"test\"/>" +
+                "<command type=\"run\" params=\"'test'\"/>" +
                 "</macro>" +
                 "</root>"));
 

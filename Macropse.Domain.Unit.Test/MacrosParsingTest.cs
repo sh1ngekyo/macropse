@@ -122,7 +122,7 @@ namespace Macropse.Domain.Unit.Test
 
             var input = XElement.Parse(
                 "<macro keys=\"A\">" +
-                "<command type=\"Run\" params=\"cmd.exe\"/>" +
+                "<command type=\"Run\" params=\"'cmd.exe'\"/>" +
                 "</macro>"
                 );
 
@@ -143,7 +143,7 @@ namespace Macropse.Domain.Unit.Test
 
             var input = XElement.Parse(
                 $"<macro keys={"\"A, S,D\""}>" +
-                    $"<command type={"\"Run\""} params={"\"cmd.exe\""}/>" +
+                    $"<command type={"\"Run\""} params={"\"'cmd.exe'\""}/>" +
                 $"</macro>"
                 );
 
@@ -161,7 +161,7 @@ namespace Macropse.Domain.Unit.Test
         {
             var input = XElement.Parse(
                 $"<macro keys={"\"A\""} loop={"\"100\""}>" +
-                    $"<command type={"\"Run\""} params={"\"cmd.exe\""}/>" +
+                    $"<command type={"\"Run\""} params={"\"'cmd.exe'\""}/>" +
                 $"</macro>"
                 );
 
@@ -177,7 +177,7 @@ namespace Macropse.Domain.Unit.Test
 
             var input = XElement.Parse(
                 $"<macro keys={"\"A\""} name=\"{expectedName}\">" +
-                    $"<command type={"\"Run\""} params={"\"cmd.exe\""}/>" +
+                    $"<command type={"\"Run\""} params={"\"'cmd.exe'\""}/>" +
                 $"</macro>"
                 );
 

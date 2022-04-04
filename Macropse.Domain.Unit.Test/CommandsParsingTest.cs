@@ -80,7 +80,7 @@ namespace Macropse.Domain.Unit.Test
         public void BuildCommandObject_CommandRunOneParam_ShouldReturnSuccess()
         {
             var input = XElement.Parse(
-                "<command type = \"Run\" params = \"cmd.exe\"/>"
+                "<command type = \"Run\" params = \"'cmd.exe'\"/>"
                 );
 
             var output = new CommandBuilder().BuildObject(input);
@@ -92,7 +92,7 @@ namespace Macropse.Domain.Unit.Test
         public void BuildCommandObject_CommandRunTwoParams_ShouldReturnSuccess()
         {
             var input = XElement.Parse(
-                "<command type = \"Run\" params = \"cmd.exe,true\"/>"
+                "<command type = \"Run\" params = \"'cmd.exe',true\"/>"
                 );
 
             var output = new CommandBuilder().BuildObject(input);
@@ -100,7 +100,7 @@ namespace Macropse.Domain.Unit.Test
             Assert.IsInstanceOf(typeof(CommandRun), output.Item);
 
             input = XElement.Parse(
-                "<command type = \"Run\" params = \"cmd.exe, false\"/>"
+                "<command type = \"Run\" params = \"'cmd.exe', false\"/>"
                 );
 
             output = new CommandBuilder().BuildObject(input);
@@ -112,7 +112,7 @@ namespace Macropse.Domain.Unit.Test
         public void BuildCommandObject_CommandRunMoreParamsThanAllowed_ShouldReturnError()
         {
             var input = XElement.Parse(
-                "<command type = \"Run\" params = \"cmd.exe,true,true,false\"/>"
+                "<command type = \"Run\" params = \"'cmd.exe',true,true,false\"/>"
                 );
 
             var output = new CommandBuilder().BuildObject(input);
@@ -197,7 +197,7 @@ namespace Macropse.Domain.Unit.Test
         public void BuildCommandObject_CommandShowMsgBox_ShouldReturnSuccess()
         {
             var input = XElement.Parse(
-                "<command type = \"showmsgbox\" params = \"test test test\"/>"
+                "<command type = \"showmsgbox\" params = \"'test test test'\"/>"
                 );
 
             var output = new CommandBuilder().BuildObject(input);
