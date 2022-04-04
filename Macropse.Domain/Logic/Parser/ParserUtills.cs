@@ -22,7 +22,7 @@ namespace Macropse.Domain.Logic.Parser
 
         public static List<string> ExtractRawParams(this string xmlAttributeValue)
         {
-            return string.IsNullOrEmpty(xmlAttributeValue) ? null : xmlAttributeValue.ToLower().Split(new char[] { ',' }).ToList();
+            return string.IsNullOrEmpty(xmlAttributeValue) ? null : xmlAttributeValue.ToLower().Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries).ToList();
         }
 
         public static bool TryToParam<T>(string raw, out T parsedParam)
@@ -43,6 +43,14 @@ namespace Macropse.Domain.Logic.Parser
 
             try
             {
+                if(typeof(T).Equals(typeof(string)))
+                {
+                    if(!raw.StartsWith("'") || !raw.EndsWith("'"))
+                    {
+                        return false;
+                    }
+                    raw = raw.Replace("'", "");
+                }
                 parsedParam = (T)Convert.ChangeType(raw, typeof(T));
                 return true;
             }

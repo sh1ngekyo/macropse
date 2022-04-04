@@ -8,19 +8,38 @@ namespace Macropse.Domain.Logic.Settings
 {
     public static class Specification
     {
+        public interface IValidParam
+        {
+            ParamType Type { get; }
+            uint Count { get; }
+        }
+
         public interface ICommandParamsInfo
         {
-            List<ParamType> ValidTypes { get; }
+            List<IValidParam> ValidTypes { get; }
             (uint MinCount, uint MaxCount) Bounds { get; }
+        }
+
+        private class ValidParam : IValidParam
+        {
+            public ParamType Type { get; }
+
+            public uint Count { get; }
+
+            internal ValidParam(ParamType validType, uint count)
+            {
+                Type = validType;
+                Count = count;
+            }
         }
 
         private class CommandParamsInfo : ICommandParamsInfo
         {
-            public List<ParamType> ValidTypes { get; }
+            public List<IValidParam> ValidTypes { get; }
 
             public (uint MinCount, uint MaxCount) Bounds { get; }
 
-            internal CommandParamsInfo(List<ParamType> validTypes, (uint MinCount, uint MaxCount) bounds)
+            internal CommandParamsInfo(List<IValidParam> validTypes, (uint MinCount, uint MaxCount) bounds)
             {
                 ValidTypes = validTypes;
                 Bounds = bounds;
@@ -47,20 +66,20 @@ namespace Macropse.Domain.Logic.Settings
 
         internal static readonly IReadOnlyDictionary<CommandType, ICommandParamsInfo> ParamsTable = new Dictionary<CommandType, ICommandParamsInfo>()
         {
-            { CommandType.Run, new CommandParamsInfo(new List<ParamType>(2){ParamType.String, ParamType.Bool}, (1, 2))},
-            { CommandType.ShowMsgBox, new CommandParamsInfo(new List<ParamType>(1){ParamType.String}, (1, 1))},
-            { CommandType.MoveMouseTo, new CommandParamsInfo(new List<ParamType>(2){ParamType.Num, ParamType.Num, ParamType.Bool}, (2, 3))},
-            { CommandType.Delay, new CommandParamsInfo(new List<ParamType>(1){ParamType.Num}, (1, 1))},
-            { CommandType.Sendkey, new CommandParamsInfo(new List<ParamType>(1){ParamType.Key}, (1, 1))},
+            { CommandType.Run, new CommandParamsInfo(new List<IValidParam>(2){ new ValidParam(ParamType.String, 1), new ValidParam(ParamType.Bool, 1) }, (1, 2))},
+            { CommandType.ShowMsgBox, new CommandParamsInfo(new List<IValidParam>(1){ new ValidParam(ParamType.String, 1) }, (1, 1))},
+            { CommandType.MoveMouseTo, new CommandParamsInfo(new List<IValidParam>(2){ new ValidParam(ParamType.Num, 2), new ValidParam(ParamType.Bool, 1) }, (2, 3))},
+            { CommandType.Delay, new CommandParamsInfo(new List<IValidParam>(1){ new ValidParam(ParamType.Num, 1) }, (1, 1))},
+            { CommandType.Sendkey, new CommandParamsInfo(new List<IValidParam>(1){ new ValidParam(ParamType.Key, 100) }, (1, 100))},
             { CommandType.Exit, null},
             { CommandType.LeftClick, null},
             { CommandType.RightClick, null},
-            { CommandType.SendSignal, new CommandParamsInfo(new List<ParamType>(2){ParamType.Num, ParamType.Num}, (1, 2))},
-            { CommandType.MouseScroll, new CommandParamsInfo(new List<ParamType>(1){ParamType.String}, (1, 1))},
-            { CommandType.VolumeAdd, new CommandParamsInfo(new List<ParamType>(1){ParamType.Num}, (1, 1))},
-            { CommandType.VolumeRemove, new CommandParamsInfo(new List<ParamType>(1){ParamType.Num}, (1, 1))},
+            { CommandType.SendSignal, new CommandParamsInfo(new List<IValidParam>(1){ new ValidParam(ParamType.Num, 2) }, (1, 2))},
+            { CommandType.MouseScroll, new CommandParamsInfo(new List<IValidParam>(1){ new ValidParam(ParamType.String, 1) }, (1, 1))},
+            { CommandType.VolumeAdd, new CommandParamsInfo(new List<IValidParam>(1){ new ValidParam(ParamType.Num, 1) }, (1, 1))},
+            { CommandType.VolumeRemove, new CommandParamsInfo(new List<IValidParam>(1){ new ValidParam(ParamType.Num, 1) }, (1, 1))},
             { CommandType.VolumeMute, null},
-            { CommandType.VolumeSet, new CommandParamsInfo(new List<ParamType>(1){ParamType.Num}, (1, 1))},
+            { CommandType.VolumeSet, new CommandParamsInfo(new List<IValidParam>(1){ new ValidParam(ParamType.Num, 1) }, (1, 1))},
         };
 
         public static readonly IReadOnlyDictionary<ParamType, Type> ParamsTypeTable = new Dictionary<ParamType, Type>()
