@@ -161,7 +161,7 @@ namespace Macropse.Domain.Unit.Test
         public void BuildCommandObject_CommandMoveMouseToMoreParamsThanAllowed_ShouldReturnError()
         {
             var input = XElement.Parse(
-                "<command type = \"movemouseto\" params = \"111,222, 333\"/>"
+                "<command type = \"movemouseto\" params = \"111,222, true, 356\"/>"
                 );
 
             var output = new CommandBuilder().BuildObject(input);
@@ -206,15 +206,15 @@ namespace Macropse.Domain.Unit.Test
         }
 
         [Test]
-        public void BuildCommandObject_CommandSendKeyMultiplyParams_ShouldReturnError()
+        public void BuildCommandObject_CommandSendKeyMultiplyParams_ShouldReturnSuccess()
         {
             var input = XElement.Parse(
                 "<command type = \"sendkey\" params = \"A,S, D\"/>"
                 );
 
             var output = new CommandBuilder().BuildObject(input);
-            Assert.True(output.HasError);
-            Assert.IsInstanceOf(typeof(ParamsOutOfBoundsMessage), output.ErrorMessage);
+            Assert.False(output.HasError);
+            Assert.IsInstanceOf(typeof(CommandSendKey), output.Item);
         }
 
         [Test]
