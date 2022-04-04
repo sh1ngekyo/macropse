@@ -21,7 +21,7 @@ namespace Macropse.Domain.Logic.Parser
         {
             if (commandParamsInfo is null)
             {
-                if(rawParams != null)
+                if (!(rawParams is null))
                 {
                     return new OutputPackage<List<dynamic>>(item: default, errorMessage: new UnknownArgumentMessage("command", "params"));
                 }
@@ -40,16 +40,24 @@ namespace Macropse.Domain.Logic.Parser
 
             var parsedParams = new List<dynamic>();
 
-            for (var i = 0; i < rawParams.Count; ++i)
+            var indexOfList = 0;
+            var count = 0;
+            foreach (var rawParam in rawParams)
             {
-                Specification.ParamsTypeTable.TryGetValue(commandParamsInfo.ValidTypes[i], out var paramType);
-                object[] args = { rawParams[i] };
-                dynamic paramPac = typeof(ParamParser).GetMethod(nameof(ParamParser.ParseParam)).MakeGenericMethod(paramType).Invoke(null, args);
+                Specification.ParamsTypeTable.TryGetValue(commandParamsInfo.ValidTypes[indexOfList].Type, out var validParam);
+                object[] args = { rawParam };
+                dynamic paramPac = typeof(ParamParser).GetMethod(nameof(ParamParser.ParseParam)).MakeGenericMethod(validParam).Invoke(null, args);
                 if (paramPac.HasError)
                 {
                     return new OutputPackage<List<dynamic>>(item: default(List<dynamic>), errorMessage: paramPac.ErrorMessage);
                 }
                 parsedParams.Add(paramPac.Item);
+                count++;
+                if(count >= commandParamsInfo.ValidTypes[indexOfList].Count)
+                {
+                    count = 0;
+                    ++indexOfList;
+                }
             }
 
             return new OutputPackage<List<dynamic>>(item: parsedParams, errorMessage: default);
@@ -77,10 +85,10 @@ namespace Macropse.Domain.Logic.Parser
 
             var typeVal = sourceData.Attribute("type")?.Value;
 
-            if (typeVal != null && typeVal.ToEnum<CommandType>(out var comtype))
+            if (!(typeVal is null) && typeVal.ToEnum<CommandType>(out var comtype))
             {
                 var loop = (uint)1;
-                if (sourceData.Attribute("loop") != null)
+                if (!(sourceData.Attribute("loop") is null))
                 {
                     var loopPac = ParamParser.ParseParam<uint>(sourceData.Attribute("loop").Value);
                     if (loopPac.HasError)
