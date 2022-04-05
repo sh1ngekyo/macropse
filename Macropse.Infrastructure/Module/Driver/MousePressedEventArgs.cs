@@ -8,8 +8,8 @@ namespace Macropse.Infrastructure.Module.Driver
 {
     public enum ScrollDirection
     {
-        Down = 0,
-        Up = 1,
+        Up = 0,
+        Down = 1,
         None,
     }
 
